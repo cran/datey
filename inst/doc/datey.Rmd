@@ -1,0 +1,352 @@
+---
+title: "Get started with datey"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Get started with datey}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(datey)
+```
+
+This vignette is a hands-on guide to the **datey** package. For the
+motivation behind the annual-grid approach and the associativity guarantee,
+see [Why **datey**?][why-datey]. For the complete formal specification, see the
+[**datey** specification][spec].
+
+## The core types
+
+**datey** provides three S3 classes:
+
+- **`datey`** -- a point in time, stored at day-fraction precision.
+- **`durationy`** -- a duration in years.
+- **`datey_interval`** -- a half-open `[start, end)` time interval.
+
+These are atomic types[^datey-interval-is-atomic] that store dates and durations as 
+integers with units of 1/534&#8201;360 of a
+year). As a result, arithmetic with these types is exact and associative.
+
+[^datey-interval-is-atomic]: Even though `datey_interval` stores the start and the end of
+a time interval, it too is atomic, which means that `datey_interval`s can be
+stored in a single vector without any additional special handling.
+
+## Creating a `datey`
+
+### When in the day?
+
+Exposure periods specified by the dates \eqn{a} to \eqn{b} typically mean that
+the whole of the day \eqn{a} and the whole of the day \eqn{b} are included.
+In the **datey** system this corresponds to using 
+`start_day()` for \eqn{a} and
+`end_day()` for \eqn{b}.
+
+Deaths on the other hand typically happen *during* a day.
+In the **datey** system this corresponds to using 
+`mid_day()`.
+
+These distinctions may be new to you and your first reaction may be that they
+are immaterial. But it costs very little to be precise and sometimes
+systematic errors can accumulate and end up being material.
+
+### From year, month and day
+
+`start_day()`, `mid_day()` and `end_day()` create a `datey` from scratch:
+
+```{r}
+start_day(2024, 3, 7)   # Start of the day 7 March 2024
+mid_day(2024, 3, 7)     # Middle of the day 7 March 2024
+end_day(2024, 3, 7)     # End of the day 7 March 2024
+```
+
+The end of a day is the same point as the start of the next, so
+`end_day()` applied to a day is identical to `start_day()` applied to the
+following day:
+
+```{r}
+identical(end_day(2024, 3, 7), start_day(2024, 3, 8))
+```
+
+For an arbitrary position within a day, `datey()` accepts a day fraction
+between 0 and 1:
+
+```{r}
+datey(2024, 3, 7, 0.25)   # Quarter of the way through the day 7 March 2024
+```
+
+### From base R dates
+
+It is often the case that data already contains dates defined using the
+standard base R types `Date`[^fractional-dates], `POSIXct` or `POSIXlt`.
+
+To convert these to a `datey`, use `start_day()`, `mid_day()` or `end_day()`:
+
+```{r}
+d <- as.Date("2024-03-07")
+start_day(d)
+mid_day(d)
+end_day(d)
+```
+
+[^fractional-dates]: Even though the `Date` type is not designed for
+fractional dates, it typically uses floating point under the covers,
+and can unintentionally end up with a fractional value
+e.g. by taking a mean of `Date`s. For this reason, 
+a `day_fraction` argument is always required for a `Date`.
+
+### From fractional years or text
+
+`datey()` also accepts a fractional calendar year or a character string in
+`YYYY-MM-DD[.f]` format:
+
+```{r}
+datey(2024)           # Start of calendar year 2024
+datey(2024.5)         # Midway through calendar year 2024
+
+datey("2024-03-07")   # Start of the day 7 March 2024 (day fraction defaults to 0)
+datey("2024-03-07.5") # Middle of the day 7 March 2024
+```
+
+## Properties of a `datey`
+
+The `$` operator extracts components of a `datey`:
+
+```{r}
+t <- mid_day(2024, 3, 7)
+t$year
+t$month
+t$day
+t$day_fraction
+```
+
+If you need several components at once, it is more efficient to use 
+`to_ymdf()` instead:
+
+```{r}
+to_ymdf(t)
+```
+
+`as.double()` converts to a fractional calendar year; `as.integer()` gives
+the calendar year:
+
+```{r}
+as.double(t)
+as.integer(t)
+```
+
+`is_start_day()` and `is_mid_day()` test the position within the day. Note
+that `end_day()` produces a `datey` at the start of the following day, so it
+tests as `is_start_day()`:
+
+```{r}
+is_start_day(start_day(2024, 3, 7)) # TRUE
+is_mid_day(mid_day(2024, 3, 7))     # TRUE
+is_start_day(end_day(2024, 3, 7))   # TRUE because end = start of next day
+is_mid_day(datey(2024, 3, 7, 0.25)) # FALSE
+```
+
+## Creating a `durationy`
+
+`durationy`s typically arise as `datey` differences:
+
+```{r}
+dob <- start_day(as.Date("1965-09-12"))
+dod <- mid_day(2024, 3, 7)
+age <- dod - dob
+age
+```
+
+You can create them explicitly using `durationy()`, which accepts a number of
+years:
+
+```{r}
+durationy(1)      # One year
+durationy(0.5)    # Half a year
+durationy(-2.5)   # Two and a half years in the past
+```
+
+And you can convert them back to numerics using
+`as.double()`, which gives the duration as years, and
+`as.integer()`, which truncates toward
+zero:
+
+```{r}
+as.double(age)
+as.integer(age)   # Whole years only
+```
+
+## Comparisons and arithmetic
+
+A number of arithmetic operations are available for `datey`, `durationy` and
+`datey_interval`.
+
+Beware that not all combinations are valid because, for instance,
+it doesn't make sense to add two dates together.
+
+The table below summarises the valid arithmetic and comparison operations.
+All arithmetic is carried out as exact integer arithmetic on the underlying
+click counts, so the results are exact and associative.
+
+| Left | Op | Right | Result |
+|:---|:---|:---|:---|
+| `datey` | `-` | `datey` | `durationy` |
+| `datey` | `+ -` | `durationy` | `datey` |
+| `durationy` | `+` | `datey` | `datey` |
+| `durationy` | `+ -` | `durationy` | `durationy` |
+| `datey` | `== != < <= > >=` | `datey` | `logical` |
+| `durationy` | `== != < <= > >=` | `durationy` | `logical` |
+| `datey` | `%to%` | `datey` | `datey_interval` |
+| `datey_interval` | `== !=` | `datey_interval` | `logical` |
+| `datey_interval` | `%includes%` | `datey` | `logical` |
+| `datey_interval` | `&` | `datey_interval` | `datey_interval` |
+
+```{r}
+start  <- start_day(2000, 1, 1)
+one_yr <- durationy(1)
+qtr_yr <- durationy(0.25)
+
+start + one_yr    # One year later
+start - qtr_yr    # Quarter of a year earlier
+
+one_yr - qtr_yr   # Three quarters of a year
+one_yr + qtr_yr
+
+datey(2024) < datey(2025)     # TRUE
+durationy(1) > durationy(0.5) # TRUE
+```
+
+You can also do mixed arithmetic with `datey` and `durationy` and numbers,
+in which case `datey`s and `durationy`s are first converted to `double`s:
+
+```{r}
+identical(datey(2000) + 25, 2025)     # TRUE
+identical(durationy(2) * 0.05, 0.10)  # TRUE
+```
+
+## `datey_interval` -- representing a time period
+
+A `datey_interval` is a half-open `[start, end)` interval. Create one with
+`datey_interval()` or the `%to%` operator:
+
+```{r}
+a  <- start_day(2024, 1, 1)
+b  <- start_day(2025, 1, 1)
+interval <- a %to% b
+interval
+```
+
+The `$start`, `$end` and `$duration` properties extract the interval's
+components:
+
+```{r}
+interval$start
+interval$end
+interval$duration
+```
+
+`durationy()` accepts a `datey_interval` directly:
+
+```{r}
+durationy(interval)
+```
+
+### Interval membership testing
+
+`%includes%` tests whether a `datey` falls inside the interval. The interval
+includes its start and excludes its end:
+
+```{r}
+interval %includes% a                     # TRUE  -- start is included
+interval %includes% b                     # FALSE -- end is excluded
+interval %includes% mid_day(2024, 6, 15)  # TRUE
+```
+
+### Interval properties
+
+`is_proper()` returns `TRUE` when start ≤ end; `is_collapsed()` returns
+`TRUE` when start ≥ end. A point interval `[a, a)` is both proper and
+collapsed (it contains no time):
+
+```{r}
+is_proper(interval)    # TRUE because start <= end
+is_collapsed(interval) # FALSE because start < end
+
+point <- a %to% a      # Empty (point) interval
+is_proper(point)       # TRUE because a <= a
+is_collapsed(point)    # TRUE because a >= a
+```
+
+### Intersection
+
+The `&` operator returns the intersection of two `datey_interval`s. This is
+the most direct way to compute the overlap of two time periods:
+
+```{r}
+period    <- start_day(2023, 7, 1) %to% end_day(2024, 6, 30)
+year_2024 <- start_day(2024, 1, 1) %to% end_day(2024, 12, 31)
+
+overlap <- period & year_2024
+overlap
+
+overlap$duration  # exposure in calendar year 2024, in years
+```
+
+## NA values
+
+Throughout the **datey** package, `NA` will cause an error when used where
+a `datey_`, `durationy_` or `datey_interval_` is expected.
+This is because the type of `NA` is `logical`. which has no meaningful 
+date or duration interpretation therefore potentially indicates user
+error.
+
+If you want an NA value with a **datey** system type, use the explicit forms
+`NA_datey_`, `NA_durationy_` or `NA_datey_interval_` as appropriate.
+
+`is.na()` and `anyNA()` work as expected:
+
+```{r}
+is.na(NA_datey_)
+anyNA(c(datey(2000), NA_datey_, datey(2024)))
+```
+
+By default, out-of-range inputs stop execution. With
+`strict = FALSE` they become `NA` instead:
+
+```{r}
+datey(999.9, strict = FALSE)           # Outside [1000,3000]: NA
+start_day(2000, 0, 12, strict = FALSE) # Invalid month: NA
+mid_day(2001, 2, 29, strict = FALSE)   # Invalid day (given year and month): NA
+durationy(2000.1, strict = FALSE)      # exceeds 2000-year limit: NA
+```
+
+NA values propagate through arithmetic:
+
+```{r}
+start_day(2024, 1, 1) + NA_durationy_
+```
+
+## Sequences and statistics
+
+`seq()`, `min()`, `max()`, `range()` and `mean()` all work on `datey` and
+`durationy` vectors:
+
+```{r}
+dates <- c(datey(2021), datey(2022), datey(2023))
+
+min(dates)
+max(dates)
+mean(dates)
+
+seq(from = datey(2020), to = datey(2024), by = durationy(2))
+```
+
+[why-datey]: why-datey.html
+[spec]: spec.html

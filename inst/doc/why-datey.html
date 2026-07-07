@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Why datey?</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Why datey?</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(datey)</span></code></pre></div>
+<div id="the-unit-is-years-but-the-data-are-dates" class="section level2">
+<h2>The unit is years, but the data are dates</h2>
+<p>Mortality rates, valuation assumptions and many other actuarial
+quantities are defined <em>per year</em>. The data they are applied to –
+dates of birth, dates of death, policy anniversaries, valuation dates –
+are measured in days.</p>
+<p>Converting between the two seems like it should be trivial, but it
+isn’t. Consider these calculations:</p>
+<ul>
+<li><p>“Add one year” to 2024‑02‑29. There is no 2025‑02‑29, so is it
+2025‑02‑28 or is it 2025‑03‑01? Both are defensible, and different tools
+(and different people) choose differently.</p></li>
+<li><p>“Add half a year” twice starting from 2000‑01‑01. Does this land
+on the same point in time as a single “add one year” step? With most
+day-based arithmetic, the answer is no – the result depends on how you
+split the year up, and on the order in which you do the
+additions.</p></li>
+</ul>
+<p>For a single <em>ad hoc</em> calculation this kind of ambiguity is a
+curiosity. For an actuarial model that combines exposure periods, runs
+sensitivities, and is reconciled and audited, it’s a problem: the same
+logical calculation, expressed two different but equivalent ways, can
+produce two different numbers.</p>
+</div>
+<div id="the-datey-approach-a-fixed-annual-grid" class="section level2">
+<h2>The <strong>datey</strong> approach: a fixed annual grid</h2>
+<p><strong>datey</strong> picks <em>one</em> standardised, precise
+mapping from dates onto an annual grid, and guarantees that arithmetic
+on that grid is exact and associative. Every <code>datey</code> and
+<code>durationy</code> is stored internally as a count of
+<em>clicks</em>, where one click is 1 / 534 360 of a year, a number
+chosen so that 1/365 and 1/366 of a year, and useful fractions of days
+and years, are represented exactly.</p>
+<p>With this approach, date and duration calculations reduce to plain
+old integer arithmetic which is both precise and associative.</p>
+<p>The practical consequence is that the two-steps-vs-one-step problem
+above does not arise:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>start <span class="ot">&lt;-</span> <span class="fu">start_day</span>(<span class="dv">2000</span>, <span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>half_year <span class="ot">&lt;-</span> <span class="fu">durationy</span>(<span class="fl">0.5</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>two_steps <span class="ot">&lt;-</span> (start <span class="sc">+</span> half_year) <span class="sc">+</span> half_year</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>one_step  <span class="ot">&lt;-</span> start <span class="sc">+</span> (half_year <span class="sc">+</span> half_year)</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>two_steps</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co">#&gt; [1] 2001-01-01.0</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>one_step</span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="co">#&gt; [1] 2001-01-01.0</span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="fu">identical</span>(two_steps, one_step)</span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
+<p><code>(a + d1) + d2 == a + (d1 + d2)</code> for any
+<code>datey</code> <code>a</code> and <code>durationy</code>s
+<code>d1</code>, <code>d2</code> – always, exactly, regardless of leap
+years or the order of operations. That’s the guarantee
+<strong>datey</strong> is built around, and the <a href="spec.html">specification</a> sets it out precisely.</p>
+</div>
+<div id="interval-algebra-for-rate-periods" class="section level2">
+<h2>Interval algebra for rate periods</h2>
+<p>Actuarial calculations very often involve asking “for how much of
+this period did rate X apply?” – e.g. combining a policy’s time at risk
+with the period over which a particular assumption set is valid.</p>
+<p><strong>datey</strong> represents time intervals as
+<code>datey_interval</code>s, written <code>start %to% end</code>. These
+are half-open, i.e. <code>[start, end)</code>, intervals, which means
+consecutive periods interlock precisely without gaps or
+double-counting.</p>
+<p><strong>datey</strong> provides interval algebra to work with time
+intervals directly:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>time_at_risk <span class="ot">&lt;-</span> <span class="fu">start_day</span>(<span class="dv">2023</span>, <span class="dv">4</span>, <span class="dv">1</span>) <span class="sc">%to%</span> <span class="fu">end_day</span>(<span class="dv">2024</span>, <span class="dv">4</span>, <span class="dv">1</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>rate_period_2024 <span class="ot">&lt;-</span> <span class="fu">start_day</span>(<span class="dv">2024</span>, <span class="dv">1</span>, <span class="dv">1</span>) <span class="sc">%to%</span> <span class="fu">end_day</span>(<span class="dv">2025</span>, <span class="dv">12</span>, <span class="dv">31</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co"># the part of the time at risk to which the 2024 rate applies</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>overlap <span class="ot">&lt;-</span> time_at_risk <span class="sc">&amp;</span> rate_period_2024</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>overlap</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt; [1] [2024-01-01.0, 2024-04-02.0)</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co"># ... as a duration in years, ready to multiply by an annual rate</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="fu">durationy</span>(overlap<span class="sc">$</span>end <span class="sc">-</span> overlap<span class="sc">$</span>start)</span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co">#&gt; [1] 0.251366 yr</span></span></code></pre></div>
+</div>
+<div id="standardised-day-fractions-for-exposure-calculations" class="section level2">
+<h2>Standardised day-fractions for exposure calculations</h2>
+<p>Because a <code>datey</code> can represent a position <em>within</em>
+a day (as a fraction of a year), <strong>datey</strong> provides
+<code>start_day()</code>, <code>mid_day()</code> and
+<code>end_day()</code> for the three points within a day that come up
+most often:</p>
+<ul>
+<li><code>start_day()</code> – the day is <em>included</em> from its
+start. Use this e.g. for the start of a period at risk.</li>
+<li><code>end_day()</code> – the day is included up to and including its
+end. This is often how the end of risk periods are specified.</li>
+<li><code>mid_day()</code> – on average, an event such as death occurs
+halfway through the day it is recorded on.</li>
+</ul>
+<p>Choosing consistently between these (rather than, say, always using
+midnight) improves clarity and accuracy as to what events are and are
+not included in a time period.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">2026</span><span class="dt">L</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="dv">1</span><span class="dt">L</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="dv">1</span><span class="dt">L</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>one_day_period <span class="ot">&lt;-</span> <span class="fu">start_day</span>(y, m, d) <span class="sc">%to%</span> <span class="fu">end_day</span>(<span class="dv">2026</span>, m, d)</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>one_day_period</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt; [1] [2026-01-01.0, 2026-01-02.0)</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>mid <span class="ot">&lt;-</span> <span class="fu">mid_day</span>(y, m, d)</span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>mid</span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co">#&gt; [1] 2026-01-01.5</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="fu">interval_includes</span>(one_day_period, mid)</span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
+</div>
+<div id="what-datey-deliberately-leaves-out" class="section level2">
+<h2>What <strong>datey</strong> deliberately leaves out</h2>
+<p>To keep the guarantees above simple and dependable,
+<strong>datey</strong> is very narrowly scoped. It is <em>not</em> the
+right tool for:</p>
+<ul>
+<li>General date arithmetic for output, e.g. “what date is 3 months from
+now” for a calendar shown to a user.</li>
+<li>Parsing or formatting dates beyond the simple
+<code>YYYY-MM-DD[.fff]</code> representation.</li>
+<li>Time zones, daylight saving time, leap seconds, or different
+calendars.</li>
+</ul>
+<p>Packages like <a href="https://clock.r-lib.org/">clock</a> and <a href="https://lubridate.tidyverse.org/">lubridate</a> already do
+that.</p>
+<p>The trade-off is deliberate: by refusing to be a general date
+library, <strong>datey</strong> can make a precise, associative annual
+grid <em>the</em> representation for rate-related calculations, with one
+well-defined answer regardless of how the calculation is structured.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
