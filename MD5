@@ -1,7 +1,7 @@
-dc980a2156acd4e1747620665a6de14d *DESCRIPTION
+b9b7f07abc103fb565b48ec63d81deea *DESCRIPTION
 d744875c6f23c26a032b74b92c799e38 *LICENSE
 40ce989e7764bc0d5660f0d2f4490dbd *NAMESPACE
-37d66893645656a8d518b3e37ea1226b *NEWS.md
+bd4db7ae3e4b205d3b955bc7e0e3a6c6 *NEWS.md
 50d8e05dcb67c7f92c2b296460509f05 *R/checks.R
 a725b79304f4dd7faa4f34ba65818b73 *R/common.R
 2b54053a2c5c2121ab45662d680b6fbb *R/constants.R
@@ -15,7 +15,7 @@ b0392ad3e5143e72e50307bf5f985bd8 *R/ops.R
 3466cf85f9baf4d03b6d28d282f37b45 *R/pillar.R
 0a10ebe78e52f2e2cbdd5188165d4aac *R/summary.R
 499d34b1ef5c29d8c3b753ec04342a03 *R/zzz.R
-8f6049927c75cb83f89f364d01c75fce *README.md
+3735c70325526243ff680b6ddbb493de *README.md
 262a5da33b3b641dbf1ec570e9b40f8e *build/vignette.rds
 fb0faad07bff45edf895b0959f1562e4 *inst/WORDLIST
 5bb3b8355a06f6da4c0e2efd947658a5 *inst/doc/datey.R
@@ -61,7 +61,7 @@ c8ec93b6f11e6ddbb9304b6ebbff83f9 *src/R_datey_interval.cpp
 44fcf1ce38e8e06069b40f1f53395104 *src/R_is_leap_year.cpp
 b1db3229b2590e62871c49a12523fd0f *src/S_datey.cpp
 f8a5d09e8dec2d33fb82a812ad776593 *src/S_datey_interval.cpp
-a7a473fa0d91f33be70bca3aa65e107a *src/S_durationy.cpp
+8495837630e17d80bd6040c6a06fd70a *src/S_durationy.cpp
 c3bd28019cd81db86f7d3d1f30029bc4 *src/cpp11.cpp
 f4fe724557e21692ae40a980c3e87aa5 *src/datey.h
 cd49afcb4fd4b3ea2f9a1c8c7c8e18be *src/math.cpp

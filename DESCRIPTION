@@ -1,6 +1,6 @@
 Package: datey
 Title: Exact Date and Duration Arithmetic on an Annual Grid
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: 
     person("Tim", "Gordon", , "tim.gordon@btinternet.com", role = c("aut", "cre"),
            comment = c(ORCID = "0009-0006-3087-4384"))
@@ -24,8 +24,8 @@ Config/testthat/edition: 3
 Encoding: UTF-8
 Language: en-GB
 NeedsCompilation: yes
-Packaged: 2026-07-01 10:40:08 UTC; Tim Gordon
+Packaged: 2026-07-14 15:30:19 UTC; Tim Gordon
 Author: Tim Gordon [aut, cre] (ORCID: <https://orcid.org/0009-0006-3087-4384>)
 Maintainer: Tim Gordon <tim.gordon@btinternet.com>
 Repository: CRAN
-Date/Publication: 2026-07-07 09:30:15 UTC
+Date/Publication: 2026-07-14 16:40:13 UTC

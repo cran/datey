@@ -16,8 +16,9 @@ status](https://www.r-pkg.org/badges/version/datey)](https://CRAN.R-project.org/
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
-The **datey** package provides a standardised mapping of dates onto a
-discrete annual grid, together with exact date and duration arithmetic.
+The **datey** package provides a standardised mapping of dates,
+including fractions of a day, onto a discrete annual grid, together with
+exact date and duration arithmetic.
 
 If you work primarily with mortality rates and time intervals defined by
 year but your input data uses dates, *and* precision is important, then
@@ -47,8 +48,13 @@ For more detail on the motivation for **datey**, see [Why
 
 ## Installation
 
-You can install the development version of datey from
-[GitHub](https://github.com/) with:
+Install from CRAN:
+
+``` r
+install.packages("datey")
+```
+
+Or install the latest development version from GitHub:
 
 ``` r
 # install.packages("pak")
@@ -102,5 +108,6 @@ started](https://r-datey.logmu.org/articles/datey.html).
     package. Interestingly, that author’s preferred approach is to use
     integer day counts, which is also fixed precision.
 
-[^3]: Partly on grounds of triviality but because handling this issue
-    with date systems that do not handle fractions of a day is messy.
+[^3]: Possibly on grounds of triviality, but also sometimes simply
+    because handling it is messy in date systems that do not handle
+    fractions of a day.
