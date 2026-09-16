@@ -19,17 +19,6 @@ one_step
 identical(two_steps, one_step)
 
 ## -----------------------------------------------------------------------------
-time_at_risk <- start_day(2023, 4, 1) %to% end_day(2024, 4, 1)
-rate_period_2024 <- start_day(2024, 1, 1) %to% end_day(2025, 12, 31)
-
-# the part of the time at risk to which the 2024 rate applies
-overlap <- time_at_risk & rate_period_2024
-overlap
-
-# ... as a duration in years, ready to multiply by an annual rate
-durationy(overlap$end - overlap$start)
-
-## -----------------------------------------------------------------------------
 y <- 2026L
 m <- 1L
 d <- 1L
@@ -40,4 +29,19 @@ mid <- mid_day(y, m, d)
 mid
 
 interval_includes(one_day_period, mid)
+
+## -----------------------------------------------------------------------------
+period_2024 <- datey(2024) %to% datey(2025) # Calendar year 2024
+
+period_2024 %includes% datey(2024) # TRUE
+period_2024 %includes% datey(2025) # FALSE
+
+time_at_risk <- start_day(2023, 4, 1) %to% end_day(2024, 4, 1)
+
+# the part of the time at risk to which the 2024 rate applies
+overlap <- time_at_risk & period_2024
+overlap
+
+# ... as a duration in years, ready to multiply by an annual rate
+durationy(overlap$end - overlap$start)
 

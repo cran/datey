@@ -347,9 +347,9 @@ package. For the motivation behind the annual-grid approach and the
 associativity guarantee, see <a href="why-datey.html">Why
 <strong>datey</strong>?</a>. For the complete formal specification, see
 the <a href="spec.html"><strong>datey</strong> specification</a>.</p>
-<div id="the-core-types" class="section level2">
-<h2>The core types</h2>
-<p><strong>datey</strong> provides three S3 classes:</p>
+<div id="core-types" class="section level2">
+<h2>Core types</h2>
+<p><strong>datey</strong> provides three atomic<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> S3 classes:</p>
 <ul>
 <li><strong><code>datey</code></strong> – a point in time, stored at
 day-fraction precision.</li>
@@ -357,9 +357,9 @@ day-fraction precision.</li>
 <li><strong><code>datey_interval</code></strong> – a half-open
 <code>[start, end)</code> time interval.</li>
 </ul>
-<p>These are atomic types<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> that store dates and durations as integers
-with units of 1/534 360 of a year). As a result, arithmetic with these
-types is exact and associative.</p>
+<p>These all store dates and durations as integers with units of
+1/534 360 of a year (<em>clicks</em>). As a result, arithmetic with
+these types is exact and associative.</p>
 </div>
 <div id="creating-a-datey" class="section level2">
 <h2>Creating a <code>datey</code></h2>
@@ -405,12 +405,12 @@ or <code>POSIXlt</code>.</p>
 <p>To convert these to a <code>datey</code>, use
 <code>start_day()</code>, <code>mid_day()</code> or
 <code>end_day()</code>:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(<span class="st">&quot;2024-03-07&quot;</span>)</span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">start_day</span>(d)</span>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>r_date <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(<span class="st">&quot;2024-03-07&quot;</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">start_day</span>(r_date)</span>
 <span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#&gt; [1] 2024-03-07.0</span></span>
-<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="fu">mid_day</span>(d)</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="fu">mid_day</span>(r_date)</span>
 <span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&gt; [1] 2024-03-07.5</span></span>
-<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="fu">end_day</span>(d)</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="fu">end_day</span>(r_date)</span>
 <span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co">#&gt; [1] 2024-03-08.0</span></span></code></pre></div>
 </div>
 <div id="from-fractional-years-or-text" class="section level3">
@@ -478,9 +478,9 @@ position within the day. Note that <code>end_day()</code> produces a
 <h2>Creating a <code>durationy</code></h2>
 <p><code>durationy</code>s typically arise as <code>datey</code>
 differences:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>dob <span class="ot">&lt;-</span> <span class="fu">start_day</span>(<span class="fu">as.Date</span>(<span class="st">&quot;1965-09-12&quot;</span>))</span>
-<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>dod <span class="ot">&lt;-</span> <span class="fu">mid_day</span>(<span class="dv">2024</span>, <span class="dv">3</span>, <span class="dv">7</span>)</span>
-<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>age <span class="ot">&lt;-</span> dod <span class="sc">-</span> dob</span>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>birth_date <span class="ot">&lt;-</span> <span class="fu">start_day</span>(<span class="fu">as.Date</span>(<span class="st">&quot;1965-09-12&quot;</span>))</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>death_date <span class="ot">&lt;-</span> <span class="fu">mid_day</span>(<span class="dv">2024</span>, <span class="dv">3</span>, <span class="dv">7</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>age <span class="ot">&lt;-</span> death_date <span class="sc">-</span> birth_date</span>
 <span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>age</span>
 <span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="co">#&gt; [1] 58.485804 yr</span></span></code></pre></div>
 <p>You can create them explicitly using <code>durationy()</code>, which
@@ -583,17 +583,17 @@ associative.</p>
 </tbody>
 </table>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>start  <span class="ot">&lt;-</span> <span class="fu">start_day</span>(<span class="dv">2000</span>, <span class="dv">1</span>, <span class="dv">1</span>)</span>
-<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>one_yr <span class="ot">&lt;-</span> <span class="fu">durationy</span>(<span class="dv">1</span>)</span>
-<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>qtr_yr <span class="ot">&lt;-</span> <span class="fu">durationy</span>(<span class="fl">0.25</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>one_year <span class="ot">&lt;-</span> <span class="fu">durationy</span>(<span class="dv">1</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>quarter_year <span class="ot">&lt;-</span> <span class="fu">durationy</span>(<span class="fl">0.25</span>)</span>
 <span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a></span>
-<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>start <span class="sc">+</span> one_yr    <span class="co"># One year later</span></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>start <span class="sc">+</span> one_year        <span class="co"># One year later</span></span>
 <span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="co">#&gt; [1] 2001-01-01.0</span></span>
-<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a>start <span class="sc">-</span> qtr_yr    <span class="co"># Quarter of a year earlier</span></span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a>start <span class="sc">-</span> quarter_year    <span class="co"># Quarter of a year earlier</span></span>
 <span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a><span class="co">#&gt; [1] 1999-10-01.75</span></span>
 <span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a></span>
-<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a>one_yr <span class="sc">-</span> qtr_yr   <span class="co"># Three quarters of a year</span></span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a>one_year <span class="sc">-</span> quarter_year <span class="co"># Three quarters of a year</span></span>
 <span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a><span class="co">#&gt; [1] 0.75 yr</span></span>
-<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a>one_yr <span class="sc">+</span> qtr_yr</span>
+<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a>one_year <span class="sc">+</span> quarter_year</span>
 <span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a><span class="co">#&gt; [1] 1.25 yr</span></span>
 <span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a></span>
 <span id="cb14-15"><a href="#cb14-15" tabindex="-1"></a><span class="fu">datey</span>(<span class="dv">2024</span>) <span class="sc">&lt;</span> <span class="fu">datey</span>(<span class="dv">2025</span>)     <span class="co"># TRUE</span></span>
@@ -679,11 +679,11 @@ overlap of two time periods:</p>
 <div id="na-values" class="section level2">
 <h2>NA values</h2>
 <p>Throughout the <strong>datey</strong> package, <code>NA</code> will
-cause an error when used where a <code>datey_</code>,
-<code>durationy_</code> or <code>datey_interval_</code> is expected.
-This is because the type of <code>NA</code> is <code>logical</code>.
-which has no meaningful date or duration interpretation therefore
-potentially indicates user error.</p>
+cause an error when used where a <code>datey</code>,
+<code>durationy</code> or <code>datey_interval</code> is expected. This
+is because the type of <code>NA</code> is <code>logical</code>. which
+has no meaningful date or duration interpretation therefore potentially
+indicates user error.</p>
 <p>If you want an NA value with a <strong>datey</strong> system type,
 use the explicit forms <code>NA_datey_</code>,
 <code>NA_durationy_</code> or <code>NA_datey_interval_</code> as
@@ -727,10 +727,12 @@ appropriate.</p>
 <div class="footnotes footnotes-end-of-document">
 <hr />
 <ol>
-<li id="fn1"><p>Even though <code>datey_interval</code> stores the start
-and the end of a time interval, it too is atomic, which means that
-<code>datey_interval</code>s can be stored in a single vector without
-any additional special handling.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn1"><p>An atomic type can be stored in a single R vector
+without any additional special handling. Although they have properties
+such as <code>t$year</code> for a <code>datey</code> or
+<code>interval$start</code> for a <code>datey_interval</code>, these
+properties are generated on the fly – they are not accessing separate
+underlying data vectors.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
 <li id="fn2"><p>Even though the <code>Date</code> type is not designed
 for fractional dates, it typically uses floating point under the covers,
 and can unintentionally end up with a fractional value e.g. by taking a

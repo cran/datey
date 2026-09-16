@@ -19,10 +19,10 @@ identical(end_day(2024, 3, 7), start_day(2024, 3, 8))
 datey(2024, 3, 7, 0.25)   # Quarter of the way through the day 7 March 2024
 
 ## -----------------------------------------------------------------------------
-d <- as.Date("2024-03-07")
-start_day(d)
-mid_day(d)
-end_day(d)
+r_date <- as.Date("2024-03-07")
+start_day(r_date)
+mid_day(r_date)
+end_day(r_date)
 
 ## -----------------------------------------------------------------------------
 datey(2024)           # Start of calendar year 2024
@@ -52,9 +52,9 @@ is_start_day(end_day(2024, 3, 7))   # TRUE because end = start of next day
 is_mid_day(datey(2024, 3, 7, 0.25)) # FALSE
 
 ## -----------------------------------------------------------------------------
-dob <- start_day(as.Date("1965-09-12"))
-dod <- mid_day(2024, 3, 7)
-age <- dod - dob
+birth_date <- start_day(as.Date("1965-09-12"))
+death_date <- mid_day(2024, 3, 7)
+age <- death_date - birth_date
 age
 
 ## -----------------------------------------------------------------------------
@@ -68,14 +68,14 @@ as.integer(age)   # Whole years only
 
 ## -----------------------------------------------------------------------------
 start  <- start_day(2000, 1, 1)
-one_yr <- durationy(1)
-qtr_yr <- durationy(0.25)
+one_year <- durationy(1)
+quarter_year <- durationy(0.25)
 
-start + one_yr    # One year later
-start - qtr_yr    # Quarter of a year earlier
+start + one_year        # One year later
+start - quarter_year    # Quarter of a year earlier
 
-one_yr - qtr_yr   # Three quarters of a year
-one_yr + qtr_yr
+one_year - quarter_year # Three quarters of a year
+one_year + quarter_year
 
 datey(2024) < datey(2025)     # TRUE
 durationy(1) > durationy(0.5) # TRUE
