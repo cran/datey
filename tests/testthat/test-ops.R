@@ -254,6 +254,7 @@ test_that("%includes% accepts numeric RHS", {
   expect_identical(interval %includes% 2000.5, TRUE)
   expect_identical(interval %includes% 2001,   FALSE)
   expect_identical(interval %includes% 1999.9, FALSE)
+  expect_identical(interval %includes% 2001.1, FALSE)
 })
 
 test_that("all op result types", {
@@ -297,6 +298,7 @@ test_that("all op result types", {
 
   # | `datey_interval` | `%includes%` | `datey` | `logical` | Whether the interval contains the date
   expect_identical(interval %includes% t, TRUE)
+  expect_identical(interval %includes% t2, FALSE)
 
 
   #' - Comparison, i.e. a `datey` or `durationy` `==` `!=` `<` `<=` `>` `>=` numeric or vice versa. Result is `logical`.

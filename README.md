@@ -5,7 +5,7 @@
 &#10;After changing this file, run devtools::build_readme()
 -->
 
-# datey <img src="man/figures/logo.png" align="right" />
+# datey <img src="man/figures/logo.png" align="right" alt="datey logo" />
 
 <!-- badges: start -->
 
@@ -15,6 +15,8 @@ status](https://www.r-pkg.org/badges/version/datey)](https://CRAN.R-project.org/
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
+
+Documentation: <https://r-datey.logmu.org/>
 
 The **datey** package provides a standardised mapping of dates,
 including fractions of a day, onto a discrete annual grid, together with

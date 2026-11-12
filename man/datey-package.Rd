@@ -27,11 +27,11 @@ Arithmetic, comparison and summary operations are defined in \link{ops},
 }
 }
 \author{
-\strong{Maintainer}: Tim Gordon \email{tim.gordon@btinternet.com} (\href{https://orcid.org/0009-0006-3087-4384}{ORCID})
+\strong{Maintainer}: Tim Gordon \email{tim@timgord.com} (\href{https://orcid.org/0009-0006-3087-4384}{ORCID})
 
 Authors:
 \itemize{
-  \item Tim Gordon \email{tim.gordon@btinternet.com} (\href{https://orcid.org/0009-0006-3087-4384}{ORCID})
+  \item Tim Gordon \email{tim@timgord.com} (\href{https://orcid.org/0009-0006-3087-4384}{ORCID})
 }
 
 }
